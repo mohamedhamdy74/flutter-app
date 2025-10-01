@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:routing/api/api-client.dart';
+import 'package:routing/api/constant-urls.dart';
 import 'package:routing/screens/home.dart';
 import 'package:routing/screens/register.dart';
 
@@ -13,6 +15,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormBuilderState>();
+  // ApiClient _apiClient = ApiClient();
+  ApiClient _apiClient = ApiClient();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,16 +67,16 @@ class _LoginState extends State<Login> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     FormBuilderTextField(
-                      name: 'email',
+                      name: 'userName',
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
-                        FormBuilderValidators.email(),
+                        
                       ]),
                       decoration: InputDecoration(
-                        labelText: 'Email',
+                        labelText: 'User name',
                         labelStyle: TextStyle(color: Colors.black),
-                        hintText: "Enter your email",
-                        prefixIcon: Icon(Icons.email),
+                        hintText: "Enter your user name",
+                        prefixIcon: Icon(Icons.person),
                         prefixIconColor: Colors.deepOrange,
                         focusColor: Colors.deepOrange,
                         focusedBorder: OutlineInputBorder(
@@ -125,15 +129,46 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                        try{
                           if (_formKey.currentState?.saveAndValidate() ??
                               false) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Home()),
+                            var email = _formKey.currentState?.value['userName'];
+                            var password =
+                                _formKey.currentState?.value['password'];
+                          
+                            var response = await _apiClient.postData(
+                              BaseUrls.authUrl,
+                              {
+                                "username": email,
+                                "password": password
+                              },
                             );
-                          } else {}
-                        },
+                            if (response.statusCode == 200) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Home()),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Login Failed"),
+                                ),
+                              );
+                            }
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => Home()),
+                            // );
+                          } else {}}catch(e){
+                          print("Error: $e");
+                             ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Error occurred")),
+                            );
+                        }
+                        }
+                        ,
 
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepOrange,
