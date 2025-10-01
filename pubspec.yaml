@@ -38,6 +38,8 @@ dependencies:
   form_builder_validators: ^11.2.0
   dio: ^5.9.0
   pretty_dio_logger: ^1.4.0
+  get: ^4.7.2
+  shared_preferences: ^2.5.3
 
 
 dev_dependencies:

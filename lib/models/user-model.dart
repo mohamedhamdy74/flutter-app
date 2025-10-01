@@ -4,7 +4,17 @@
 
 import 'dart:convert';
 
-AuthModel authModelFromJson(String str) => AuthModel.fromJson(json.decode(str));
+AuthModel authModelFromJson(dynamic data) {
+  Map<String, dynamic> jsonData;
+  if (data is String) {
+    jsonData = json.decode(data);
+  } else if (data is Map<String, dynamic>) {
+    jsonData = data;
+  } else {
+    throw FormatException("Invalid data type for AuthModel");
+  }
+  return AuthModel.fromJson(jsonData);
+}
 
 String authModelToJson(AuthModel data) => json.encode(data.toJson());
 

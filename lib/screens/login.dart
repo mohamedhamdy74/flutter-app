@@ -1,217 +1,200 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:routing/api/api-client.dart';
-import 'package:routing/api/constant-urls.dart';
-import 'package:routing/screens/home.dart';
+import 'package:get/get.dart';
 import 'package:routing/screens/register.dart';
+import 'package:routing/controller/login_controller.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Login extends StatelessWidget {
+  Login({Key? key}) : super(key: key);
+  // لم يعد هناك حاجة لـ _formKey هنا، سيتم استخدام formKey من الكنترولر
 
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  final _formKey = GlobalKey<FormBuilderState>();
-  // ApiClient _apiClient = ApiClient();
-  ApiClient _apiClient = ApiClient();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 300,
-              decoration: BoxDecoration(
-                color: Colors.deepOrange,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(100.0),
+    final controller = Get.put(LoginController());
+    return GetBuilder<LoginController>(
+      builder: (controller) {
+        return Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: 300,
+                  decoration: BoxDecoration(
+                    color: Colors.deepOrange,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(100.0),
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: Icon(
+                          Icons.ac_unit_outlined,
+                          color: Colors.white,
+                          size: 100.0,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 20,
+                        right: 20,
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: Icon(
-                      Icons.ac_unit_outlined,
-                      color: Colors.white,
-                      size: 100.0,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 20.0,
+                    right: 20.0,
+                    top: 50.0,
                   ),
-                  Positioned(
-                    bottom: 20,
-                    right: 20,
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
-                top: 50.0,
-              ),
-              child: FormBuilder(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FormBuilderTextField(
-                      name: 'userName',
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        
-                      ]),
-                      decoration: InputDecoration(
-                        labelText: 'User name',
-                        labelStyle: TextStyle(color: Colors.black),
-                        hintText: "Enter your user name",
-                        prefixIcon: Icon(Icons.person),
-                        prefixIconColor: Colors.deepOrange,
-                        focusColor: Colors.deepOrange,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.deepOrange),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    FormBuilderTextField(
-                      name: 'password',
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.minLength(6),
-                      ]),
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        labelStyle: TextStyle(color: Colors.black),
-                        hintText: "Enter your password",
-                        prefixIcon: Icon(Icons.lock),
-                        prefixIconColor: Colors.deepOrange,
-                        focusColor: Colors.deepOrange,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(color: Colors.deepOrange),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      obscureText: true,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                  child: FormBuilder(
+                    key: controller.formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Forgot Password ?",
-                            textAlign: TextAlign.end,
-                            style: TextStyle(color: Colors.deepOrange),
+                        FormBuilderTextField(
+                          name: 'userName',
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(),
+                          ]),
+                          decoration: InputDecoration(
+                            labelText: 'User name',
+                            labelStyle: TextStyle(color: Colors.black),
+                            hintText: "Enter your user name",
+                            prefixIcon: Icon(Icons.person),
+                            prefixIconColor: Colors.deepOrange,
+                            focusColor: Colors.deepOrange,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.deepOrange),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        FormBuilderTextField(
+                          name: 'password',
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.minLength(6),
+                          ]),
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle: TextStyle(color: Colors.black),
+                            hintText: "Enter your password",
+                            prefixIcon: Icon(Icons.lock),
+                            prefixIconColor: Colors.deepOrange,
+                            focusColor: Colors.deepOrange,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.deepOrange),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          obscureText: true,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                "Forgot Password ?",
+                                textAlign: TextAlign.end,
+                                style: TextStyle(color: Colors.deepOrange),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 30.0),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: controller.isLoading
+                                ? null
+                                : () {
+                                    if (controller.formKey.currentState
+                                            ?.saveAndValidate() ??
+                                        false) {
+                                      controller.usernmaeController.text =
+                                          controller
+                                              .formKey
+                                              .currentState
+                                              ?.value['userName'] ??
+                                          '';
+                                      controller.passwordController.text =
+                                          controller
+                                              .formKey
+                                              .currentState
+                                              ?.value['password'] ??
+                                          '';
+                                      controller.login();
+                                    } else {
+                                      Get.snackbar(
+                                        'Error',
+                                        'Please fill all fields correctly',
+                                      );
+                                    }
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.deepOrange,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 100,
+                                vertical: 15,
+                              ),
+                            ),
+                            child: controller.isLoading
+                                ? CircularProgressIndicator(color: Colors.white)
+                                : Text(
+                                    'Login',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 30.0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                        try{
-                          if (_formKey.currentState?.saveAndValidate() ??
-                              false) {
-                            var email = _formKey.currentState?.value['userName'];
-                            var password =
-                                _formKey.currentState?.value['password'];
-                          
-                            var response = await _apiClient.postData(
-                              BaseUrls.authUrl,
-                              {
-                                "username": email,
-                                "password": password
-                              },
-                            );
-                            if (response.statusCode == 200) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Home()),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Login Failed"),
-                                ),
-                              );
-                            }
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => Home()),
-                            // );
-                          } else {}}catch(e){
-                          print("Error: $e");
-                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Error occurred")),
-                            );
-                        }
-                        }
-                        ,
-
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepOrange,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 100,
-                            vertical: 15,
-                          ),
-                        ),
-                        child: Text(
-                          'Login',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Don't have an account ?"),
+                    TextButton(
+                      onPressed: () {
+                        Get.to(() => Register());
+                      },
+                      child: Text(
+                        "Sign Up",
+                        style: TextStyle(color: Colors.deepOrange),
                       ),
                     ),
                   ],
                 ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text("Don't have an account ?"),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Register()),
-                    );
-                  },
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(color: Colors.deepOrange),
-                  ),
-                ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
