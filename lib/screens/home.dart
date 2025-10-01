@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
     if (response.statusCode == 200) {
       List<dynamic> data = response.data;
       setState(() {
-        _categories = ["All", ...data.map((e) => e.toString()).toList()];
+        _categories = ["All", ...data.map((e) => e["name"].toString())];
       });
     } else {
       print("Error: ${response.statusCode}");
